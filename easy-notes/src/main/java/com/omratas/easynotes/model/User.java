@@ -1,44 +1,38 @@
 package com.omratas.easynotes.model;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "users")
+@Table(name = "app_user")
 @Data
-@AllArgsConstructor
 public class User extends AbstractEntity implements Serializable {
 
-    @NotNull
-    @Size(max = 65)
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "password")
+    @JsonIgnore
+    private String password;
+
     @Column(name = "first_name")
     private String firstName;
 
-    @Size(max = 65)
     @Column(name = "last_name")
     private String lastName;
 
-    @NotNull
-    @Email
-    @Size(max = 100)
-    @Column(unique = true)
-    private String email;
-    @NotNull
-    @Size(max = 128)
-    private String password;
-
-    @OneToOne(fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            mappedBy = "user")
-    private UserProfile userProfile;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
 
 
 }

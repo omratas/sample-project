@@ -35,7 +35,7 @@ public class CommentController {
         }).orElseThrow(() -> new ResourceNotFoundException("Post", "id", postId));
     }
 
-    @PutMapping("/{postId}/comments/{commentId}")
+    @PutMapping("/{postId}/{commentId}")
     public Comment updateComment(@PathVariable(value = "postId") String postId,
                                  @PathVariable(value = "commentId") String commentId,
                                  @Valid @RequestBody Comment commentRequest) {
@@ -49,7 +49,7 @@ public class CommentController {
         }).orElseThrow(() -> new ResourceNotFoundException("CommentId", "id", commentId));
     }
 
-    @DeleteMapping("/{postId}/comments/{commentId}")
+    @DeleteMapping("/{postId}/{commentId}")
     public ResponseEntity<?> deleteComment(@PathVariable(value = "postId") String postId,
                                            @PathVariable(value = "commentId") String commentId) {
         if (!postRepository.existsById(postId)) {
